@@ -1,0 +1,896 @@
+{
+ "users": [
+  {
+   "username": "demo_student",
+   "email": "student.demo@boardingfinder.test",
+   "fullName": "Nadeesha Perera",
+   "phone": "0771234567",
+   "gender": "female",
+   "role": "student",
+   "isVerified": true,
+   "notificationPreference": {
+    "create": {
+     "emailEnabled": true,
+     "inAppEnabled": true,
+     "bookingUpdates": true,
+     "watchlistAlerts": true,
+     "roommateAlerts": true
+    }
+   },
+   "roommatePreference": {
+    "create": {
+     "age": 22,
+     "university": "University of Peradeniya",
+     "faculty": "Engineering",
+     "yearOfStudy": "3rd Year",
+     "budgetMin": 18000,
+     "budgetMax": 30000,
+     "preferredCity": "Kandy",
+     "preferredArea": "Peradeniya",
+     "sleepSchedule": "Sleeps before midnight",
+     "cleanlinessLevel": 4,
+     "studyHabit": "Quiet evenings",
+     "smokingAllowed": false,
+     "petsAllowed": false,
+     "foodPreference": "Vegetarian-friendly",
+     "sociabilityLevel": 3,
+     "notes": "Prefers a calm study-friendly environment."
+    }
+   },
+   "id": "id0"
+  },
+  {
+   "username": "demo_owner_kandy",
+   "email": "owner.kandy@boardingfinder.test",
+   "fullName": "Kumari Boarding Homes",
+   "phone": "0812345678",
+   "gender": "female",
+   "role": "boardingOwner",
+   "isVerified": true,
+   "id": "id1"
+  },
+  {
+   "username": "demo_owner_colombo",
+   "email": "owner.colombo@boardingfinder.test",
+   "fullName": "Metro Student Stays",
+   "phone": "0112345678",
+   "gender": "male",
+   "role": "boardingOwner",
+   "isVerified": true,
+   "id": "id2"
+  },
+  {
+   "username": "demo_admin",
+   "email": "admin.demo@boardingfinder.test",
+   "fullName": "Platform Admin",
+   "role": "admin",
+   "isVerified": true,
+   "id": "id3"
+  },
+  {
+   "username": "demo_student_anu",
+   "email": "anu.demo@boardingfinder.test",
+   "fullName": "Anupama Jayasinghe",
+   "phone": "0772345678",
+   "gender": "female",
+   "role": "student",
+   "isVerified": true,
+   "roommatePreference": {
+    "create": {
+     "age": 23,
+     "university": "University of Peradeniya",
+     "faculty": "Engineering",
+     "yearOfStudy": "4th Year",
+     "budgetMin": 20000,
+     "budgetMax": 32000,
+     "preferredCity": "Kandy",
+     "preferredArea": "Peradeniya",
+     "sleepSchedule": "Sleeps before midnight",
+     "cleanlinessLevel": 4,
+     "studyHabit": "Quiet evenings",
+     "smokingAllowed": false,
+     "petsAllowed": false,
+     "foodPreference": "Vegetarian-friendly",
+     "sociabilityLevel": 3,
+     "notes": "Would love a calm roommate who respects study time."
+    }
+   },
+   "id": "id4"
+  },
+  {
+   "username": "demo_student_hiruni",
+   "email": "hiruni.demo@boardingfinder.test",
+   "fullName": "Hiruni Ekanayake",
+   "phone": "0773456789",
+   "gender": "female",
+   "role": "student",
+   "isVerified": true,
+   "roommatePreference": {
+    "create": {
+     "age": 21,
+     "university": "University of Peradeniya",
+     "faculty": "Science",
+     "yearOfStudy": "2nd Year",
+     "budgetMin": 17000,
+     "budgetMax": 26000,
+     "preferredCity": "Kandy",
+     "preferredArea": "Peradeniya",
+     "sleepSchedule": "Early riser",
+     "cleanlinessLevel": 5,
+     "studyHabit": "Flexible",
+     "smokingAllowed": false,
+     "petsAllowed": false,
+     "foodPreference": "Vegetarian-friendly",
+     "sociabilityLevel": 2,
+     "notes": "Keeps shared spaces tidy and likes quiet mornings."
+    }
+   },
+   "id": "id5"
+  },
+  {
+   "username": "demo_student_savindi",
+   "email": "savindi.demo@boardingfinder.test",
+   "fullName": "Savindi Maduranga",
+   "phone": "0774567890",
+   "gender": "female",
+   "role": "student",
+   "isVerified": true,
+   "roommatePreference": {
+    "create": {
+     "age": 22,
+     "university": "Kandy Technical College",
+     "faculty": "Information Technology",
+     "yearOfStudy": "Final Year",
+     "budgetMin": 22000,
+     "budgetMax": 34000,
+     "preferredCity": "Kandy",
+     "preferredArea": "Hantana",
+     "sleepSchedule": "Late sleeper",
+     "cleanlinessLevel": 3,
+     "studyHabit": "Group study",
+     "smokingAllowed": false,
+     "petsAllowed": true,
+     "foodPreference": "Flexible",
+     "sociabilityLevel": 5,
+     "notes": "More social and flexible, but still careful with budget."
+    }
+   },
+   "id": "id6"
+  },
+  {
+   "username": "demo_student_dulanga",
+   "email": "dulanga.demo@boardingfinder.test",
+   "fullName": "Dulanga Fernando",
+   "phone": "0775678901",
+   "gender": "female",
+   "role": "student",
+   "isVerified": true,
+   "roommatePreference": {
+    "create": {
+     "age": 24,
+     "university": "University of Peradeniya",
+     "faculty": "Arts",
+     "yearOfStudy": "Graduate",
+     "budgetMin": 15000,
+     "budgetMax": 23000,
+     "preferredCity": "Kandy",
+     "preferredArea": "Gelioya",
+     "sleepSchedule": "Sleeps before midnight",
+     "cleanlinessLevel": 4,
+     "studyHabit": "Quiet evenings",
+     "smokingAllowed": false,
+     "petsAllowed": false,
+     "foodPreference": "Flexible",
+     "sociabilityLevel": 2,
+     "notes": "Quiet and independent, prefers a simple routine."
+    }
+   },
+   "id": "id7"
+  },
+  {
+   "username": "demo_student_kavishka",
+   "email": "kavishka.demo@boardingfinder.test",
+   "fullName": "Kavishka Senanayake",
+   "phone": "0776789012",
+   "gender": "male",
+   "role": "student",
+   "isVerified": true,
+   "roommatePreference": {
+    "create": {
+     "age": 23,
+     "university": "University of Peradeniya",
+     "faculty": "Engineering",
+     "yearOfStudy": "3rd Year",
+     "budgetMin": 18000,
+     "budgetMax": 28000,
+     "preferredCity": "Kandy",
+     "preferredArea": "Peradeniya",
+     "sleepSchedule": "Sleeps before midnight",
+     "cleanlinessLevel": 4,
+     "studyHabit": "Quiet evenings",
+     "smokingAllowed": false,
+     "petsAllowed": false,
+     "foodPreference": "Vegetarian-friendly",
+     "sociabilityLevel": 3,
+     "notes": "Included to verify the same-gender filter."
+    }
+   },
+   "id": "id8"
+  },
+  {
+   "username": "demo_student_malsha",
+   "email": "malsha.demo@boardingfinder.test",
+   "fullName": "Malsha Wickramasinghe",
+   "phone": "0777890123",
+   "gender": "female",
+   "role": "student",
+   "isVerified": true,
+   "roommatePreference": {
+    "create": {
+     "age": 22,
+     "university": "University of Peradeniya",
+     "faculty": "Engineering",
+     "yearOfStudy": "3rd Year",
+     "budgetMin": 19000,
+     "budgetMax": 31000,
+     "preferredCity": "Kandy",
+     "preferredArea": "Peradeniya",
+     "sleepSchedule": "Sleeps before midnight",
+     "cleanlinessLevel": 4,
+     "studyHabit": "Quiet evenings",
+     "smokingAllowed": false,
+     "petsAllowed": false,
+     "foodPreference": "Vegetarian-friendly",
+     "sociabilityLevel": 3,
+     "notes": "Very close to the main demo profile and ideal for strong-match demos."
+    }
+   },
+   "id": "id9"
+  },
+  {
+   "username": "demo_student_tharushi",
+   "email": "tharushi.demo@boardingfinder.test",
+   "fullName": "Tharushi Bandara",
+   "phone": "0778901234",
+   "gender": "female",
+   "role": "student",
+   "isVerified": true,
+   "roommatePreference": {
+    "create": {
+     "age": 21,
+     "university": "University of Peradeniya",
+     "faculty": "Engineering",
+     "yearOfStudy": "2nd Year",
+     "budgetMin": 18000,
+     "budgetMax": 29000,
+     "preferredCity": "Kandy",
+     "preferredArea": "Peradeniya",
+     "sleepSchedule": "Early riser",
+     "cleanlinessLevel": 5,
+     "studyHabit": "Quiet evenings",
+     "smokingAllowed": false,
+     "petsAllowed": false,
+     "foodPreference": "Vegetarian-friendly",
+     "sociabilityLevel": 2,
+     "notes": "A tidy early riser with a strong academic routine."
+    }
+   },
+   "id": "id10"
+  },
+  {
+   "username": "demo_student_nethmi",
+   "email": "nethmi.demo@boardingfinder.test",
+   "fullName": "Nethmi Karunaratne",
+   "phone": "0779012345",
+   "gender": "female",
+   "role": "student",
+   "isVerified": true,
+   "roommatePreference": {
+    "create": {
+     "age": 23,
+     "university": "University of Peradeniya",
+     "faculty": "Management",
+     "yearOfStudy": "4th Year",
+     "budgetMin": 21000,
+     "budgetMax": 33000,
+     "preferredCity": "Kandy",
+     "preferredArea": "Katugastota",
+     "sleepSchedule": "Sleeps before midnight",
+     "cleanlinessLevel": 4,
+     "studyHabit": "Flexible",
+     "smokingAllowed": false,
+     "petsAllowed": false,
+     "foodPreference": "No special preference",
+     "sociabilityLevel": 4,
+     "notes": "Good medium-strength match with slightly different location and routine."
+    }
+   },
+   "id": "id11"
+  },
+  {
+   "username": "demo_student_rashmi",
+   "email": "rashmi.demo@boardingfinder.test",
+   "fullName": "Rashmi Alwis",
+   "phone": "0780123456",
+   "gender": "female",
+   "role": "student",
+   "isVerified": true,
+   "roommatePreference": {
+    "create": {
+     "age": 22,
+     "university": "SLIIT",
+     "faculty": "Computing",
+     "yearOfStudy": "Final Year",
+     "budgetMin": 24000,
+     "budgetMax": 36000,
+     "preferredCity": "Colombo",
+     "preferredArea": "Malabe",
+     "sleepSchedule": "Late sleeper",
+     "cleanlinessLevel": 3,
+     "studyHabit": "Group study",
+     "smokingAllowed": false,
+     "petsAllowed": true,
+     "foodPreference": "Flexible",
+     "sociabilityLevel": 5,
+     "notes": "Useful for showing lower-ranked out-of-area matches."
+    }
+   },
+   "id": "id12"
+  },
+  {
+   "username": "demo_student_shenali",
+   "email": "shenali.demo@boardingfinder.test",
+   "fullName": "Shenali Weerasekara",
+   "phone": "0781234567",
+   "gender": "female",
+   "role": "student",
+   "isVerified": true,
+   "roommatePreference": {
+    "create": {
+     "age": 22,
+     "university": "University of Peradeniya",
+     "faculty": "Science",
+     "yearOfStudy": "3rd Year",
+     "budgetMin": 17500,
+     "budgetMax": 27500,
+     "preferredCity": "Kandy",
+     "preferredArea": "Peradeniya",
+     "sleepSchedule": "Sleeps before midnight",
+     "cleanlinessLevel": 4,
+     "studyHabit": "Quiet evenings",
+     "smokingAllowed": false,
+     "petsAllowed": false,
+     "foodPreference": "Vegetarian-friendly",
+     "sociabilityLevel": 3,
+     "notes": "Another high-compatibility profile for a dense top of the list."
+    }
+   },
+   "id": "id13"
+  },
+  {
+   "username": "demo_student_isuri",
+   "email": "isuri.demo@boardingfinder.test",
+   "fullName": "Isuri Rathnayake",
+   "phone": "0782345678",
+   "gender": "female",
+   "role": "student",
+   "isVerified": true,
+   "roommatePreference": {
+    "create": {
+     "age": 24,
+     "university": "University of Peradeniya",
+     "faculty": "Arts",
+     "yearOfStudy": "Graduate",
+     "budgetMin": 15000,
+     "budgetMax": 22000,
+     "preferredCity": "Kandy",
+     "preferredArea": "Gelioya",
+     "sleepSchedule": "Early riser",
+     "cleanlinessLevel": 5,
+     "studyHabit": "Quiet evenings",
+     "smokingAllowed": false,
+     "petsAllowed": false,
+     "foodPreference": "No special preference",
+     "sociabilityLevel": 2,
+     "notes": "Lower-budget quiet profile for variety within Kandy matches."
+    }
+   },
+   "id": "id14"
+  },
+  {
+   "username": "demo_student_methmi",
+   "email": "methmi.demo@boardingfinder.test",
+   "fullName": "Methmi Fernando",
+   "phone": "0783456789",
+   "gender": "female",
+   "role": "student",
+   "isVerified": true,
+   "roommatePreference": {
+    "create": {
+     "age": 21,
+     "university": "University of Colombo",
+     "faculty": "Law",
+     "yearOfStudy": "2nd Year",
+     "budgetMin": 20000,
+     "budgetMax": 32000,
+     "preferredCity": "Colombo",
+     "preferredArea": "Borella",
+     "sleepSchedule": "Late sleeper",
+     "cleanlinessLevel": 3,
+     "studyHabit": "Flexible",
+     "smokingAllowed": false,
+     "petsAllowed": false,
+     "foodPreference": "Halal-friendly",
+     "sociabilityLevel": 4,
+     "notes": "A clearly different city preference for comparison in demos."
+    }
+   },
+   "id": "id15"
+  },
+  {
+   "username": "demo_student_dinuka",
+   "email": "dinuka.demo@boardingfinder.test",
+   "fullName": "Dinuka Peris",
+   "phone": "0784567890",
+   "gender": "male",
+   "role": "student",
+   "isVerified": true,
+   "roommatePreference": {
+    "create": {
+     "age": 22,
+     "university": "University of Peradeniya",
+     "faculty": "Science",
+     "yearOfStudy": "3rd Year",
+     "budgetMin": 17000,
+     "budgetMax": 28000,
+     "preferredCity": "Kandy",
+     "preferredArea": "Peradeniya",
+     "sleepSchedule": "Sleeps before midnight",
+     "cleanlinessLevel": 4,
+     "studyHabit": "Quiet evenings",
+     "smokingAllowed": false,
+     "petsAllowed": false,
+     "foodPreference": "No special preference",
+     "sociabilityLevel": 3,
+     "notes": "Included so the same-gender filtering remains obvious in the demo."
+    }
+   },
+   "id": "id16"
+  }
+ ],
+ "posts": [
+  {
+   "title": "Girls Boarding Near UOP Engineering Faculty",
+   "rent": 22000,
+   "images": [
+    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+   ],
+   "address": "12 Temple Road",
+   "city": "Kandy",
+   "area": "Peradeniya",
+   "latitude": "7.2552",
+   "longitude": "80.5970",
+   "boardingType": "sharedRoom",
+   "status": "available",
+   "capacity": 2,
+   "bathroomCount": 1,
+   "preferredTenantGender": "female",
+   "ownerId": "id1",
+   "postDetail": {
+    "create": {
+     "description": "<p>Comfortable shared boarding with study desks, balcony access, and a short walk to campus.</p>",
+     "wifi": true,
+     "mealsProvided": true,
+     "kitchenAccess": true,
+     "parking": false,
+     "attachedBathroom": false,
+     "furnished": true,
+     "petAllowed": false,
+     "nearestCampus": "University of Peradeniya",
+     "distanceToCampus": 650,
+     "distanceToBusStop": 180,
+     "distanceToTown": 2400,
+     "rules": "Quiet hours after 10 PM. Female students only."
+    }
+   },
+   "id": "id17"
+  },
+  {
+   "title": "Single Annex Room for Female Student",
+   "rent": 30000,
+   "images": [
+    "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80"
+   ],
+   "address": "89 Hantana Road",
+   "city": "Kandy",
+   "area": "Hantana",
+   "latitude": "7.2849",
+   "longitude": "80.6350",
+   "boardingType": "annex",
+   "status": "available",
+   "capacity": 1,
+   "bathroomCount": 1,
+   "preferredTenantGender": "female",
+   "ownerId": "id1",
+   "postDetail": {
+    "create": {
+     "description": "<p>Private annex room with attached bathroom, reliable Wi-Fi, and peaceful surroundings ideal for study.</p>",
+     "wifi": true,
+     "mealsProvided": false,
+     "kitchenAccess": true,
+     "parking": true,
+     "attachedBathroom": true,
+     "furnished": true,
+     "petAllowed": false,
+     "nearestCampus": "University of Peradeniya",
+     "distanceToCampus": 2900,
+     "distanceToBusStop": 260,
+     "distanceToTown": 1800,
+     "rules": "No visitors after 8 PM. Advance notice for overnight travel."
+    }
+   },
+   "id": "id18"
+  },
+  {
+   "title": "Budget Shared Hostel for Male Students",
+   "rent": 18000,
+   "images": [
+    "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80"
+   ],
+   "address": "45 Galle Road",
+   "city": "Colombo",
+   "area": "Wellawatte",
+   "latitude": "6.8741",
+   "longitude": "79.8605",
+   "boardingType": "hostel",
+   "status": "available",
+   "capacity": 4,
+   "bathroomCount": 2,
+   "preferredTenantGender": "male",
+   "ownerId": "id2",
+   "postDetail": {
+    "create": {
+     "description": "<p>Affordable hostel-style boarding with meals, shared study hall, and easy access to public transport.</p>",
+     "wifi": true,
+     "mealsProvided": true,
+     "kitchenAccess": false,
+     "parking": false,
+     "attachedBathroom": false,
+     "furnished": true,
+     "petAllowed": false,
+     "nearestCampus": "National School of Business Management",
+     "distanceToCampus": 5200,
+     "distanceToBusStop": 90,
+     "distanceToTown": 700,
+     "rules": "Student ID required. No smoking indoors."
+    }
+   },
+   "id": "id19"
+  },
+  {
+   "title": "House Share with Wi-Fi and Parking",
+   "rent": 26000,
+   "images": [
+    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+   ],
+   "address": "18 Lake Drive",
+   "city": "Colombo",
+   "area": "Rajagiriya",
+   "latitude": "6.9094",
+   "longitude": "79.8950",
+   "boardingType": "houseShare",
+   "status": "reserved",
+   "capacity": 1,
+   "bathroomCount": 2,
+   "preferredTenantGender": "any",
+   "ownerId": "id2",
+   "postDetail": {
+    "create": {
+     "description": "<p>Bright room in a shared house with kitchen access, parking, and fast commuting options.</p>",
+     "wifi": true,
+     "mealsProvided": false,
+     "kitchenAccess": true,
+     "parking": true,
+     "attachedBathroom": false,
+     "furnished": true,
+     "petAllowed": false,
+     "nearestCampus": "SLIIT Metro Campus",
+     "distanceToCampus": 4200,
+     "distanceToBusStop": 140,
+     "distanceToTown": 1100,
+     "rules": "Shared chores weekly. Suitable for tidy students."
+    }
+   },
+   "id": "id20"
+  }
+ ],
+ "savedPost": [
+  {
+   "userId": "id0",
+   "postId": "id17"
+  },
+  {
+   "userId": "id0",
+   "postId": "id18"
+  },
+  {
+   "userId": "id0",
+   "postId": "id20"
+  },
+  {
+   "userId": "id4",
+   "postId": "id17"
+  },
+  {
+   "userId": "id5",
+   "postId": "id17"
+  },
+  {
+   "userId": "id6",
+   "postId": "id18"
+  },
+  {
+   "userId": "id7",
+   "postId": "id17"
+  },
+  {
+   "userId": "id8",
+   "postId": "id18"
+  },
+  {
+   "userId": "id9",
+   "postId": "id17"
+  },
+  {
+   "userId": "id10",
+   "postId": "id20"
+  }
+ ],
+ "watchlist": [
+  {
+   "userId": "id0",
+   "city": "Kandy",
+   "area": "Peradeniya",
+   "minBudget": 18000,
+   "maxBudget": 28000,
+   "preferredTenantGender": "female",
+   "boardingType": "sharedRoom",
+   "minCapacity": 1,
+   "wifiRequired": true
+  },
+  {
+   "userId": "id0",
+   "postId": "id18",
+   "city": "Kandy",
+   "area": "Hantana",
+   "maxBudget": 32000
+  },
+  {
+   "userId": "id4",
+   "city": "Kandy",
+   "area": "Peradeniya",
+   "minBudget": 19000,
+   "maxBudget": 32000,
+   "preferredTenantGender": "female",
+   "boardingType": "sharedRoom",
+   "wifiRequired": true
+  },
+  {
+   "userId": "id5",
+   "city": "Kandy",
+   "area": "Peradeniya",
+   "minBudget": 17000,
+   "maxBudget": 28000,
+   "preferredTenantGender": "female",
+   "boardingType": "sharedRoom"
+  },
+  {
+   "userId": "id6",
+   "city": "Kandy",
+   "area": "Hantana",
+   "minBudget": 22000,
+   "maxBudget": 35000,
+   "preferredTenantGender": "female",
+   "boardingType": "annex",
+   "wifiRequired": true
+  },
+  {
+   "userId": "id9",
+   "city": "Kandy",
+   "area": "Peradeniya",
+   "minBudget": 15000,
+   "maxBudget": 24000,
+   "boardingType": "sharedRoom"
+  },
+  {
+   "userId": "id10",
+   "city": "Colombo",
+   "area": "Rajagiriya",
+   "minBudget": 20000,
+   "maxBudget": 32000,
+   "boardingType": "houseShare"
+  },
+  {
+   "userId": "id11",
+   "city": "Kandy",
+   "area": "Peradeniya",
+   "minBudget": 17000,
+   "maxBudget": 29000,
+   "preferredTenantGender": "male",
+   "boardingType": "sharedRoom"
+  }
+ ],
+ "bookingRequest": [
+  {
+   "studentId": "id0",
+   "ownerId": "id1",
+   "postId": "id17",
+   "status": "pending"
+  },
+  {
+   "studentId": "id4",
+   "ownerId": "id1",
+   "postId": "id17",
+   "status": "approved"
+  },
+  {
+   "studentId": "id5",
+   "ownerId": "id1",
+   "postId": "id17",
+   "status": "pending"
+  },
+  {
+   "studentId": "id6",
+   "ownerId": "id1",
+   "postId": "id18",
+   "status": "paymentPending"
+  },
+  {
+   "studentId": "id8",
+   "ownerId": "id1",
+   "postId": "id18",
+   "status": "pending"
+  },
+  {
+   "studentId": "id10",
+   "ownerId": "id2",
+   "postId": "id20",
+   "status": "pending"
+  },
+  {
+   "studentId": "id11",
+   "ownerId": "id2",
+   "postId": "id19",
+   "status": "confirmed"
+  }
+ ],
+ "notification": [
+  {
+   "userId": "id0",
+   "type": "watchlistMatch",
+   "channel": "inApp",
+   "title": "New boarding match in Peradeniya",
+   "message": "A female shared room within your budget is now available."
+  },
+  {
+   "userId": "id0",
+   "type": "roommateMatchFound",
+   "channel": "inApp",
+   "title": "Roommate suggestions ready",
+   "message": "New same-gender student profiles were added for roommate matching."
+  }
+ ],
+ "chat": [
+  {
+   "userIDs": [
+    "id0",
+    "id1"
+   ],
+   "seenBy": [
+    "id0"
+   ],
+   "lastMessage": "Yes, Wi-Fi charges are included in the monthly rent.",
+   "id": "id21"
+  },
+  {
+   "userIDs": [
+    "id0",
+    "id2"
+   ],
+   "seenBy": [],
+   "lastMessage": "Can I schedule a visit this Saturday morning?",
+   "id": "id22"
+  }
+ ],
+ "inquiry": [
+  {
+   "studentId": "id0",
+   "ownerId": "id1",
+   "postId": "id17",
+   "type": "view",
+   "status": "accepted",
+   "chatId": "id21"
+  },
+  {
+   "studentId": "id4",
+   "ownerId": "id1",
+   "postId": "id17",
+   "type": "view",
+   "status": "pending"
+  },
+  {
+   "studentId": "id5",
+   "ownerId": "id1",
+   "postId": "id17",
+   "type": "book",
+   "status": "pending"
+  },
+  {
+   "studentId": "id6",
+   "ownerId": "id1",
+   "postId": "id18",
+   "type": "view",
+   "status": "accepted",
+   "chatId": "id22"
+  },
+  {
+   "studentId": "id8",
+   "ownerId": "id1",
+   "postId": "id18",
+   "type": "view",
+   "status": "pending"
+  },
+  {
+   "studentId": "id9",
+   "ownerId": "id1",
+   "postId": "id17",
+   "type": "view",
+   "status": "pending"
+  },
+  {
+   "studentId": "id10",
+   "ownerId": "id2",
+   "postId": "id20",
+   "type": "view",
+   "status": "pending"
+  },
+  {
+   "studentId": "id11",
+   "ownerId": "id2",
+   "postId": "id19",
+   "type": "book",
+   "status": "pending"
+  }
+ ],
+ "message": [
+  {
+   "chatId": "id21",
+   "userId": "id0",
+   "text": "Hi, is the shared room still available for next month?"
+  },
+  {
+   "chatId": "id21",
+   "userId": "id1",
+   "text": "Yes, it is available and we currently have one space left."
+  },
+  {
+   "chatId": "id21",
+   "userId": "id0",
+   "text": "Are meals and Wi-Fi included?"
+  },
+  {
+   "chatId": "id21",
+   "userId": "id1",
+   "text": "Yes, Wi-Fi charges are included in the monthly rent."
+  },
+  {
+   "chatId": "id22",
+   "userId": "id0",
+   "text": "Can I schedule a visit this Saturday morning?"
+  }
+ ]
+}

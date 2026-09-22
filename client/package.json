@@ -1,0 +1,45 @@
+{
+  "name": "estateui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "dompurify": "^3.0.9",
+    "laravel-echo": "^2.5.0",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^1.8.0",
+    "pusher-js": "^8.6.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1",
+    "react-quill": "^2.0.0",
+    "react-router-dom": "^6.22.2",
+    "recharts": "^3.8.1",
+    "sass": "^1.71.1",
+    "timeago.js": "^4.0.2",
+    "zustand": "^4.5.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@tailwindcss/vite": "^4.2.4",
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "tailwindcss": "^4.2.4",
+    "vite": "^5.1.4"
+  }
+}

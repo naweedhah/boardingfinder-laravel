@@ -26,6 +26,7 @@ React 18 + Vite · Leaflet · Zustand · PHPUnit · Playwright · Docker · GitH
 - **Roommate matching** with a weighted compatibility score and match reasons
 - **Reviews, reporting and an admin moderation dashboard** (warn, suspend, review flagged chats)
 - **Gemini integration** for owners: draft a listing description, sanity-check room photos
+- **Mobile app**: [boardingfinder-mobile](https://github.com/naweedhah/boardingfinder-mobile) (React Native / Expo) uses this same API, with bearer-token login and push notifications
 
 ## Engineering highlights
 
@@ -37,7 +38,9 @@ React 18 + Vite · Leaflet · Zustand · PHPUnit · Playwright · Docker · GitH
 | Bad data from forms (pins in the ocean, swapped lat/lng, `http://` images, absurd rents) | Form Request rules with Sri Lanka coordinate bounds, HTTPS-only image URLs and sane maximums; errors come back per field and show inline in the form |
 | Coordinates stored as text (a leftover from MongoDB) | Migration converting them to `DECIMAL(10,7)` with composite indexes for the listing and geo queries; it rolls back cleanly on every engine |
 | Authorisation spread across controllers | Sanctum tokens in an httpOnly cookie, role middleware, model Policies, login rate limiting, and tokens revoked on suspension |
-| Confidence when refactoring | 155 PHPUnit feature and unit tests, plus Playwright end-to-end specs. CI runs the suite on **SQLite, MySQL 8.4 and PostgreSQL 17**, checks style with Pint, and builds the client and the Docker images |
+| One API, two clients (browser and phone) | The same Sanctum token guard reads an httpOnly cookie from the web app or an `Authorization: Bearer` header from the mobile app, which keeps its token in the iOS Keychain / Android Keystore. `POST /api/auth/mobile/login` returns the token in the body with a per-device name, and mobile logout revokes only that device ([`MobileAuthController`](backend/app/Http/Controllers/MobileAuthController.php)) |
+| Push notifications without blocking requests | Each in-app notification and chat message queues a job that sends to the user's devices through Expo's push service (APNs + FCM), honours the push preference, batches 100 per request and deletes tokens of uninstalled apps ([`ExpoPushClient`](backend/app/Services/ExpoPushClient.php)) |
+| Confidence when refactoring | 169 PHPUnit feature and unit tests, plus Playwright end-to-end specs. CI runs the suite on **SQLite, MySQL 8.4 and PostgreSQL 17**, checks style with Pint, and builds the client and the Docker images |
 
 ## Project structure
 
@@ -89,7 +92,7 @@ npm run dev               # http://localhost:5173
 ### Tests
 
 ```bash
-cd backend && php artisan test         # 155 PHPUnit tests (in-memory SQLite)
+cd backend && php artisan test         # 169 PHPUnit tests (in-memory SQLite)
 cd client && npx playwright test       # end-to-end specs (needs the API and client running)
 ```
 

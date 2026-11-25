@@ -9,14 +9,15 @@ use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Requires a valid `token` cookie belonging to an active account.
+ * Requires a valid API token (the web client's `token` cookie or the mobile app's bearer token)
+ * belonging to an active account.
  * Status codes and messages mirror the Node `verifyToken` middleware the client was built against.
  */
 class AuthenticateWithToken
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->cookie(TokenCookie::NAME)) {
+        if (! TokenCookie::fromRequest($request)) {
             return response()->json(['message' => 'Not Authenticated!'], 401);
         }
 

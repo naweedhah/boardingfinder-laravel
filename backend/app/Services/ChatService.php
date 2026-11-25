@@ -6,6 +6,7 @@ use App\Events\MessageSent;
 use App\Models\Chat;
 use App\Models\Message;
 use App\Models\User;
+use App\Support\Push;
 use App\Support\Realtime;
 
 class ChatService
@@ -37,6 +38,7 @@ class ChatService
         if ($receiverId) {
             $this->alerts->suspiciousChatActivity($receiverId, $sender->id, $chat->id, $message->id, $flag, $text);
             Realtime::dispatch(new MessageSent($message, $receiverId));
+            Push::toUser($receiverId, 'New message from '.$sender->displayName(), $text, ['type' => 'chatMessage', 'chatId' => $chat->id]);
         }
 
         return $message;

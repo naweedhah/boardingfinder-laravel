@@ -58,6 +58,11 @@ class User extends Authenticatable
         return $this->full_name ?: $this->username;
     }
 
+    public function pushTokens(): HasMany
+    {
+        return $this->hasMany(DevicePushToken::class);
+    }
+
     public function ownedPosts(): HasMany
     {
         return $this->hasMany(Post::class, 'owner_id');

@@ -11,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
- * Chat endpoints used by the inquiry / moderation screens (`/api/sakith-chat`). Admins may read
+ * Chat endpoints used by the inquiry / moderation screens (`/api/support-chat`). Admins may read
  * any conversation to review flagged messages.
  */
 class SupportChatController extends Controller

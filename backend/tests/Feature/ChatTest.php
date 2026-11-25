@@ -165,14 +165,14 @@ class ChatTest extends TestCase
         Message::factory()->create(['chat_id' => $chat->id, 'user_id' => $student->id, 'text' => 'hello']);
 
         $this->signIn();
-        $this->getJson("/api/sakith-chat/{$chat->id}")->assertNotFound();
+        $this->getJson("/api/support-chat/{$chat->id}")->assertNotFound();
 
         $this->signIn($student);
-        $this->getJson("/api/sakith-chat/{$chat->id}")->assertOk()->assertJsonPath('0.text', 'hello');
-        $this->postJson('/api/sakith-chat/send', ['chatId' => $chat->id, 'text' => 'again'])
+        $this->getJson("/api/support-chat/{$chat->id}")->assertOk()->assertJsonPath('0.text', 'hello');
+        $this->postJson('/api/support-chat/send', ['chatId' => $chat->id, 'text' => 'again'])
             ->assertCreated()->assertJsonPath('text', 'again');
 
         $this->signIn(User::factory()->admin()->create());
-        $this->getJson("/api/sakith-chat/{$chat->id}")->assertOk()->assertJsonCount(2);
+        $this->getJson("/api/support-chat/{$chat->id}")->assertOk()->assertJsonCount(2);
     }
 }

@@ -7,8 +7,8 @@ import {
   createInquiry,
   getInquiries,
   updateInquiryStatus,
-} from "../services/sakithService";
-import "../styles/sakith.css";
+} from "../services/safetyService";
+import "../styles/safety.css";
 
 export default function InquiryBox() {
   const [inquiries, setInquiries] = useState([]);
@@ -75,7 +75,7 @@ export default function InquiryBox() {
       const res = await acceptInquiry(inquiryId);
       setStatusMessage(res.data.message || "Inquiry accepted.");
       await loadInquiries();
-      navigate(`/sakith/chat/${res.data.chat.id}`);
+      navigate(`/chat/${res.data.chat.id}`);
     } catch (error) {
       setErrorMessage(
         error.response?.data?.message || "Failed to accept inquiry.",
@@ -117,7 +117,7 @@ export default function InquiryBox() {
   };
 
   return (
-    <div className="sakith-page">
+    <div className="safety-page">
       <div className="card">
         <div className="header-row">
           <div>
@@ -191,7 +191,7 @@ export default function InquiryBox() {
 
                 <div className="action-row">
                   {inquiry.chat?.id && (
-                    <Link className="btn btn-primary" to={`/sakith/chat/${inquiry.chat.id}`}>
+                    <Link className="btn btn-primary" to={`/chat/${inquiry.chat.id}`}>
                       Open Chat
                     </Link>
                   )}

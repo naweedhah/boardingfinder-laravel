@@ -31,7 +31,7 @@ export const warnUser = (reportId) =>
   apiRequest.post("/report/warn", { reportId });
 
 export const getChatMessages = (chatId) =>
-  apiRequest.get(`/sakith-chat/${chatId}`);
+  apiRequest.get(`/support-chat/${chatId}`);
 
 export const sendChatMessage = (data) =>
-  apiRequest.post("/sakith-chat/send", data);
+  apiRequest.post("/support-chat/send", data);

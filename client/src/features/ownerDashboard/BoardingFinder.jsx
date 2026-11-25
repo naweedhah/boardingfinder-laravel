@@ -220,7 +220,9 @@ function BoardingFinder() {
   const handleLogout = async () => {
     try {
       await apiRequest.post('/auth/logout');
-    } catch (_) {}
+    } catch {
+      // Logging out locally still works if the server call fails (e.g. the token already expired).
+    }
     updateUser(null);
     navigate('/');
   };
@@ -266,7 +268,7 @@ function BoardingFinder() {
                 <AlertTriangle size={28} color="#e63946" />
               </div>
               <h3>Verification Failed</h3>
-              <p>This doesn't look like a legitimate room interior. Please upload a clear photo of the actual room.</p>
+              <p>This doesn&apos;t look like a legitimate room interior. Please upload a clear photo of the actual room.</p>
             </div>
             <button className="btn-primary full" onClick={() => setShowAIWarning(false)}>
               Okay, Got It

@@ -1,7 +1,7 @@
-import "../styles/sakith.css";
+import "../styles/safety.css";
 import { useState } from "react";
 
-import { createReport } from "../services/sakithService";
+import { createReport } from "../services/safetyService";
 
 export default function ReportButton({ messageId, postId }) {
   const [isSubmitting, setIsSubmitting] = useState(false);

@@ -17,11 +17,11 @@ import {
 } from "./lib/loaders";
 import WatchlistPage from "./features/watchlist/pages/watchlistPage";
 import RoommatePage from "./features/roommate/pages/roommatePage";
-import InquiryBox from "./features/sakith/components/InquiryBox";
-import AdminDashboard from "./features/sakith/pages/AdminDashboard";
-import ChatPage from "./features/sakith/pages/ChatPage";
+import InquiryBox from "./features/safety/components/InquiryBox";
+import AdminDashboard from "./features/safety/pages/AdminDashboard";
+import ChatPage from "./features/safety/pages/ChatPage";
 
-import BoardingFinder from "./features/aaqib/BoardingFinder";
+import BoardingFinder from "./features/ownerDashboard/BoardingFinder";
 import BookingManagementPage from "./features/booking/pages/BookingManagementPage";
 
 function App() {
@@ -82,15 +82,15 @@ function App() {
           element: <NewPostPage />,
         },
         {
-          path: "/sakith/inquiry",
+          path: "/inquiry",
           element: <InquiryBox />
         },
         {
-          path: "/sakith/admin",
+          path: "/admin",
           element: <AdminDashboard />
         },
         {
-          path: "/sakith/chat/:chatId",
+          path: "/chat/:chatId",
           element: <ChatPage />
         },
         {

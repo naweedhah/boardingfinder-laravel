@@ -6,8 +6,8 @@ import ReportButton from "../components/ReportButton";
 import {
   getChatMessages,
   sendChatMessage,
-} from "../services/sakithService";
-import "../styles/sakith.css";
+} from "../services/safetyService";
+import "../styles/safety.css";
 import { AuthContext } from "../../../context/AuthContext";
 
 export default function ChatPage() {
@@ -62,7 +62,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="sakith-page">
+    <div className="safety-page">
       <div className="card">
         <h2>Secure Chat</h2>
         <p className="text-muted">

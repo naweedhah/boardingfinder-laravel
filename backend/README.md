@@ -14,7 +14,7 @@ This is a Laravel 13 rewrite of the original Node/Express/Prisma/MongoDB API ([S
 | Real-time | Laravel Reverb (WebSockets) + Echo on the client |
 | Email | Laravel Mail (queued Mailable, only when a real mailer is configured) |
 | AI | Google Gemini via Laravel `Http` (listing description, room-photo check) |
-| Tests | PHPUnit feature + unit tests (155), in-memory SQLite locally; SQLite, MySQL and PostgreSQL in CI |
+| Tests | PHPUnit feature + unit tests (169), in-memory SQLite locally; SQLite, MySQL and PostgreSQL in CI |
 
 ## Quick start
 
@@ -63,11 +63,12 @@ DB_CONNECTION=pgsql DB_DATABASE=boardingfinder DB_USERNAME=postgres DB_PASSWORD=
 
 ## API overview
 
-All routes are under `/api`. 🔒 = needs the login cookie.
+All routes are under `/api`. 🔒 = needs a login token: the web app's `token` cookie or the mobile app's `Authorization: Bearer` header.
 
 | Area | Endpoints |
 | --- | --- |
-| Auth | `POST auth/register` · `auth/login` · `auth/logout` |
+| Auth | `POST auth/register` · `auth/login` · `auth/logout` · mobile: `POST auth/mobile/login` (`username password deviceName`, returns `{ token, expiresAt, user }`) · 🔒 `GET auth/me` · 🔒 `POST auth/mobile/logout` |
+| Push | 🔒 `POST users/push-tokens` (`token` = Expo push token, `platform` = `ios`/`android`) · 🔒 `DELETE users/push-tokens` |
 | Listings | `GET posts` (filters: `city area boardingType preferredTenantGender status capacity minPrice maxPrice`, plus `lat lng radiusKm` for a distance-sorted near search that adds `distanceKm`) · `GET posts/demand/overview` · `GET posts/{id}` · 🔒 `POST posts` (owner/admin) · 🔒 `PUT/DELETE posts/{id}` (owner) · 🔒 `POST posts/{id}/book` (student) |
 | Reviews | `GET posts/{id}/reviews` · 🔒 `POST/DELETE posts/{id}/reviews` |
 | Users | 🔒 `PUT/DELETE users/{id}` (self) · `GET users` (admin) · `POST users/save` (toggle saved listing) · `GET users/profilePosts` |
@@ -117,7 +118,9 @@ Domain highlights:
 
 ## Real-time
 
-The Node API embedded Socket.IO. Laravel's equivalent is Reverb + Echo, so the client's `SocketContext`, `Navbar` and `Chat` were switched to Echo (`client/src/lib/echo.js`). Each signed-in user subscribes to the private channel `users.{id}` (authorised through `/api/broadcasting/auth` with the login cookie) and receives `.notification.new`, `.notification.read` and `.message.new`. Broadcast failures are logged, never surfaced: if Reverb is down the REST API keeps working.
+The Node API embedded Socket.IO. Laravel's equivalent is Reverb + Echo, so the client's `SocketContext`, `Navbar` and `Chat` were switched to Echo (`client/src/lib/echo.js`). Each signed-in user subscribes to the private channel `users.{id}` (authorised through `/api/broadcasting/auth` with the login cookie, or the bearer token from the mobile app) and receives `.notification.new`, `.notification.read` and `.message.new`. Broadcast failures are logged, never surfaced: if Reverb is down the REST API keeps working.
+
+The same events also go to the mobile app as **push notifications** (`SendPushNotification` job → Expo push service → APNs/FCM), so a phone hears about a booking approval or a new message when the app is closed. Push respects the user's `push_enabled` preference, and tokens Expo reports as `DeviceNotRegistered` are deleted.
 
 ## Notes
 

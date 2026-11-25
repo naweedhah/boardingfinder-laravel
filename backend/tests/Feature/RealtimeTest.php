@@ -43,4 +43,16 @@ class RealtimeTest extends TestCase
         $this->postJson('/api/broadcasting/auth', ['socket_id' => '123.456', 'channel_name' => 'private-users.abc'])
             ->assertUnauthorized();
     }
+
+    #[Test]
+    public function the_mobile_app_authorizes_channels_with_a_bearer_token(): void
+    {
+        $me = User::factory()->create();
+        $token = $me->createToken('mobile:test')->plainTextToken;
+
+        $this->withToken($token)
+            ->postJson('/api/broadcasting/auth', ['socket_id' => '123.456', 'channel_name' => "private-users.{$me->id}"])
+            ->assertOk()
+            ->assertJsonStructure(['auth']);
+    }
 }

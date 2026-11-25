@@ -6,8 +6,10 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MobileAuthController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PushTokenController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\RoommateController;
@@ -21,7 +23,8 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 | API routes (prefixed with /api)
 |--------------------------------------------------------------------------
-| `auth.token` = valid httpOnly `token` cookie for an active account.
+| `auth.token` = a valid API token for an active account: the web client's httpOnly `token`
+| cookie, or the mobile app's `Authorization: Bearer` header.
 */
 
 // ---- Authentication --------------------------------------------------------
@@ -29,6 +32,13 @@ Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login'])->middleware('throttle:login');
     Route::post('logout', [AuthController::class, 'logout']);
+
+    // Mobile app: the token comes back in the body and is sent as a bearer token.
+    Route::post('mobile/login', [MobileAuthController::class, 'login'])->middleware('throttle:login');
+    Route::middleware('auth.token')->group(function () {
+        Route::get('me', [MobileAuthController::class, 'me']);
+        Route::post('mobile/logout', [MobileAuthController::class, 'logout']);
+    });
 });
 
 // ---- Public listing browsing ----------------------------------------------
@@ -64,6 +74,9 @@ Route::middleware('auth.token')->group(function () {
         Route::get('roommate-profile', [RoommateController::class, 'show']);
         Route::put('roommate-profile', [RoommateController::class, 'upsert']);
         Route::get('roommate-matches', [RoommateController::class, 'matches']);
+
+        Route::post('push-tokens', [PushTokenController::class, 'store']);
+        Route::delete('push-tokens', [PushTokenController::class, 'destroy']);
 
         Route::post('save', [UserController::class, 'savePost']);
         Route::get('profilePosts', [UserController::class, 'profilePosts']);

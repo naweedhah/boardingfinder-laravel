@@ -41,4 +41,11 @@ return [
         ],
     ],
 
+    // Mobile push notifications (see App\Services\ExpoPushClient). The access token is
+    // optional unless "enhanced push security" is turned on for the Expo project.
+    'expo' => [
+        'push_url' => env('EXPO_PUSH_URL', 'https://exp.host/--/api/v2/push/send'),
+        'access_token' => env('EXPO_ACCESS_TOKEN'),
+    ],
+
 ];

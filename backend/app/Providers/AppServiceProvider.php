@@ -34,14 +34,17 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * The React client authenticates with an httpOnly `token` cookie (no Authorization header),
-     * so resolve the user from a Sanctum personal access token carried in that cookie.
-     * Sanctum gives us hashed storage, expiry and server-side revocation on logout.
+     * One guard for both clients, backed by Sanctum personal access tokens (hashed storage,
+     * expiry, server-side revocation):
+     *  - the React web client sends the token in an httpOnly `token` cookie, so page scripts
+     *    can never read it;
+     *  - the mobile app has no cookie jar it controls, so it keeps the token in the device's
+     *    secure storage and sends `Authorization: Bearer <token>`.
      */
     private function registerTokenGuard(): void
     {
         Auth::viaRequest('cookie-token', function (Request $request): ?User {
-            $plainTextToken = $request->cookie(TokenCookie::NAME);
+            $plainTextToken = TokenCookie::fromRequest($request);
 
             if (! is_string($plainTextToken) || $plainTextToken === '') {
                 return null;

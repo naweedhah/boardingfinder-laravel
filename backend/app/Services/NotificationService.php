@@ -10,6 +10,7 @@ use App\Mail\NotificationMail;
 use App\Models\NotificationPreference;
 use App\Models\User;
 use App\Models\UserNotification;
+use App\Support\Push;
 use App\Support\Realtime;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -96,6 +97,9 @@ class NotificationService
 
             Realtime::dispatch(new NotificationCreated($notification));
         }
+
+        // Mobile push mirrors the notification; the app deep-links using `type` and the metadata.
+        Push::toUser($userId, $title, $message, [...$metadata, 'type' => $type->value, 'notificationId' => $notification?->id]);
 
         if ($preferences->email_enabled && $user?->email && $this->canSendEmail()) {
             try {

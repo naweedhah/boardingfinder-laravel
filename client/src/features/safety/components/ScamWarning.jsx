@@ -1,4 +1,4 @@
-import "../styles/sakith.css";
+import "../styles/safety.css";
 
 export default function ScamWarning({ text, scamFlag }) {
   if (!text && !scamFlag) return null;

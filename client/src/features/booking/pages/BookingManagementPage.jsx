@@ -36,7 +36,7 @@ function BookingCard({ booking, onAction }) {
     setChatLoading(true);
     try {
       const res = await apiRequest.post("/chats", { receiverId: booking.student.id });
-      navigate(`/sakith/chat/${res.data.id}`);
+      navigate(`/chat/${res.data.id}`);
     } catch (err) {
       setError("Failed to open chat");
     } finally {

@@ -87,7 +87,7 @@ Route::middleware('auth.token')->group(function () {
     Route::get('chats/{id}', [ChatController::class, 'show']);
     Route::post('messages/{chatId}', [MessageController::class, 'store']);
 
-    Route::prefix('sakith-chat')->group(function () {
+    Route::prefix('support-chat')->group(function () {
         Route::post('create', [SupportChatController::class, 'create']);
         Route::post('send', [SupportChatController::class, 'send']);
         Route::get('{chatId}', [SupportChatController::class, 'messages']);

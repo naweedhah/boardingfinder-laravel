@@ -5,7 +5,7 @@ import apiRequest from "../../../lib/apiRequest";
 import { AuthContext } from "../../../context/AuthContext";
 
 const getDashboardPath = (role) => {
-  if (role === "admin") return "/sakith/admin";
+  if (role === "admin") return "/admin";
   if (role === "boardingOwner") return "/boardings";
   return "/profile";
 };

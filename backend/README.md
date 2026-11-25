@@ -2,19 +2,19 @@
 
 REST + real-time backend for **BoardingFinder**, a student boarding platform: listings and map demand, bookings, inquiries, chat with scam screening, saved-search alerts, roommate matching, reviews and admin moderation.
 
-This is a Laravel 13 rewrite of the original Node/Express/Prisma/MongoDB API (`../api`). It serves the **existing React client unchanged** (same routes, same JSON, same cookie auth) apart from the real-time layer, see [Real-time](#real-time).
+This is a Laravel 13 rewrite of the original Node/Express/Prisma/MongoDB API ([Smart-Boarding-Finder](https://github.com/naweedhah/Smart-Boarding-Finder)). It serves the **existing React client unchanged** (same routes, same JSON, same cookie auth) apart from the real-time layer, see [Real-time](#real-time).
 
 ## Stack
 
 | Concern | Choice |
 | --- | --- |
 | Framework | Laravel 13, PHP 8.3+ (8.4+ recommended, see [Notes](#notes)) |
-| Database | SQLite for local dev, MySQL/MariaDB ready (Eloquent, migrations, factories, seeders) |
+| Database | SQLite for local dev; PostgreSQL and MySQL tested in CI (Eloquent, migrations, factories, seeders) |
 | Auth | Sanctum personal access tokens carried in an **httpOnly `token` cookie** (7 days, revoked on logout/suspension) |
 | Real-time | Laravel Reverb (WebSockets) + Echo on the client |
 | Email | Laravel Mail (queued Mailable, only when a real mailer is configured) |
 | AI | Google Gemini via Laravel `Http` (listing description, room-photo check) |
-| Tests | PHPUnit feature + unit tests (138), in-memory SQLite |
+| Tests | PHPUnit feature + unit tests (155), in-memory SQLite locally; SQLite, MySQL and PostgreSQL in CI |
 
 ## Quick start
 
@@ -42,7 +42,7 @@ See [.env.example](.env.example). The ones you will touch:
 | --- | --- |
 | `APP_URL` | Where this API is served (used for absolute photo URLs) |
 | `CLIENT_URL` | React origin, for CORS with credentials |
-| `DB_*` | Switch `DB_CONNECTION` to `mysql` for MySQL |
+| `DB_*` | Switch `DB_CONNECTION` to `mysql` or `pgsql` (see `.env.example`) |
 | `REVERB_*` | WebSocket server credentials (client reads matching `VITE_REVERB_*`) |
 | `MAIL_*` | Optional. With `MAIL_MAILER=log` no email is attempted |
 | `GEMINI_API_KEY` | Optional. Enables the AI description and photo check |
@@ -52,7 +52,14 @@ See [.env.example](.env.example). The ones you will touch:
 ```bash
 php artisan test
 vendor/bin/pint --test     # code style
+
+# against PostgreSQL or MySQL instead of in-memory SQLite
+DB_CONNECTION=pgsql DB_DATABASE=boardingfinder DB_USERNAME=postgres DB_PASSWORD=secret php artisan test
 ```
+
+### Docker
+
+`docker compose up --build` from the repository root starts PostgreSQL, the API, Reverb and the client (see the root README).
 
 ## API overview
 
@@ -61,14 +68,14 @@ All routes are under `/api`. 🔒 = needs the login cookie.
 | Area | Endpoints |
 | --- | --- |
 | Auth | `POST auth/register` · `auth/login` · `auth/logout` |
-| Listings | `GET posts` (filters: `city area boardingType preferredTenantGender status capacity minPrice maxPrice`) · `GET posts/demand/overview` · `GET posts/{id}` · 🔒 `POST posts` (owner/admin) · 🔒 `PUT/DELETE posts/{id}` (owner) · 🔒 `POST posts/{id}/book` (student) |
+| Listings | `GET posts` (filters: `city area boardingType preferredTenantGender status capacity minPrice maxPrice`, plus `lat lng radiusKm` for a distance-sorted near search that adds `distanceKm`) · `GET posts/demand/overview` · `GET posts/{id}` · 🔒 `POST posts` (owner/admin) · 🔒 `PUT/DELETE posts/{id}` (owner) · 🔒 `POST posts/{id}/book` (student) |
 | Reviews | `GET posts/{id}/reviews` · 🔒 `POST/DELETE posts/{id}/reviews` |
 | Users | 🔒 `PUT/DELETE users/{id}` (self) · `GET users` (admin) · `POST users/save` (toggle saved listing) · `GET users/profilePosts` |
 | Notifications | 🔒 `GET users/notification` (unread count) · `users/notifications` · `PUT users/notifications/{id}/read` · `read-all` · `GET/PUT users/notifications/preferences` · `POST users/notifications/test-email` |
 | Search alerts | 🔒 `GET/POST users/watchlists/searches` · `DELETE users/watchlists/searches/{id}` |
 | Roommates | 🔒 `GET/PUT users/roommate-profile` · `GET users/roommate-matches` |
 | Bookings | 🔒 `GET bookings` · `PUT bookings/{id}/approve\|reject\|cancel` · `POST bookings/{id}/chat` |
-| Chat | 🔒 `GET/POST chats` · `GET chats/{id}` · `PUT chats/read/{id}` · `POST messages/{chatId}` · `sakith-chat/*` |
+| Chat | 🔒 `GET/POST chats` · `GET chats/{id}` · `PUT chats/read/{id}` · `POST messages/{chatId}` · `support-chat/*` |
 | Inquiries | 🔒 `POST/GET inquiry` · `PATCH inquiry/{id}` (reject/cancel) · `PATCH inquiry/{id}/accept` |
 | Moderation | 🔒 `POST/GET report` · admin: `GET report/admin/overview` · `PATCH report/{id}` · `POST report/warn` · `POST report/user-state` |
 | Owner dashboard | 🔒 `GET boardings` · `POST boardings/add` (multipart) · `PUT boardings/{id}` · `PATCH boardings/{id}/status` · `DELETE boardings/{id}` · `POST/GET boardings/{id}/waitlist` · `POST boardings/generate-description` · `POST boardings/verify-image` |
@@ -91,6 +98,7 @@ app/
   Services/         business logic: NotificationService, AlertNotifier, BookingService,
                     ChatService, DemandService, RoommateMatcher, ReputationService,
                     ScamDetector, GeminiService
+  Support/          Geo (Haversine + bounding box), HtmlSanitizer (HTMLPurifier allow-list)
   Events/           broadcast events (NotificationCreated/Read, MessageSent)
 database/           migrations, factories, DemoSeeder (+ data/demo.json)
 routes/             api.php, channels.php
@@ -103,6 +111,8 @@ Domain highlights:
 - **Booking requests** lock the listing row inside a transaction so two students cannot take the last slot, and re-sending is idempotent.
 - **Alerts**: new/edited listings notify matching saved searches, price drops notify savers, low availability notifies savers, and three watchers in one area trigger a demand-spike alert. Users can mute each category; critical notices bypass that.
 - **Roommate matching**: weighted 0–100 score (budget 25, location 20, sleep/cleanliness/study/smoking 10 each, food/sociability/pets 5 each); same-gender, active students only.
+- **Near search**: an indexed bounding-box `WHERE` on the `DECIMAL` coordinates, then exact Haversine distances in PHP. It works the same on SQLite (no trig functions), MySQL and PostgreSQL.
+- **Input safety**: listing pins must fall inside Sri Lanka, photos must be HTTPS URLs, and rich-text descriptions are sanitised server-side. 422 responses carry `message`, a flat `errors` list and a per-field `fields` map.
 - **Safety**: messages are screened for scam phrasing, flagged `warning`/`danger`, the recipient is warned, and admins can review, warn or suspend. Suspension revokes tokens immediately.
 
 ## Real-time

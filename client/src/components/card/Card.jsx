@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import apiRequest from "../../lib/apiRequest";
-import { createReport } from "../../features/sakith/services/sakithService";
+import { createReport } from "../../features/safety/services/safetyService";
 import UploadWidget from "../uploadWidget/UploadWidget";
 import "./card.scss";
 
@@ -94,8 +94,13 @@ function Card({ item, onRemoveSaved, onReportSuccess, reportEnabled = false }) {
         <p className="address">
           <img src="/pin.png" alt="" />
           <span>{item.address}{item.area ? `, ${item.area}` : ""}</span>
+          {typeof item.distanceKm === "number" && (
+            <span className="distance">
+              {item.distanceKm < 1 ? `${Math.round(item.distanceKm * 1000)} m` : `${item.distanceKm.toFixed(1)} km`} away
+            </span>
+          )}
         </p>
-        <p className="price">LKR {item.rent}/month</p>
+        <p className="price">LKR {Number(item.rent).toLocaleString("en-LK")}/month</p>
         <div className="bottom">
           <div className="features">
             <div className="feature">

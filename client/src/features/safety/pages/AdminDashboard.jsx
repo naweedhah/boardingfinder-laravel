@@ -1,4 +1,4 @@
-import "../styles/sakith.css";
+import "../styles/safety.css";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { format } from "timeago.js";
@@ -12,7 +12,7 @@ import {
   setReportedUserState,
   updateInquiryStatus,
   warnUser
-} from "../services/sakithService";
+} from "../services/safetyService";
 
 export default function AdminDashboard() {
   const { updateUser, currentUser } = useContext(AuthContext);
@@ -148,7 +148,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="sakith-page">
+    <div className="safety-page">
       <div className="card">
         <div className="header-row">
           <div>
@@ -230,7 +230,7 @@ export default function AdminDashboard() {
                   {inquiry.chat?.id && (
                     <button
                       className="btn btn-secondary"
-                      onClick={() => navigate(`/sakith/chat/${inquiry.chat.id}`)}
+                      onClick={() => navigate(`/chat/${inquiry.chat.id}`)}
                     >
                       Open Chat
                     </button>
@@ -301,7 +301,7 @@ export default function AdminDashboard() {
                 <div className="action-row">
                   <button
                     className="btn btn-secondary"
-                    onClick={() => navigate(`/sakith/chat/${message.chatId}`)}
+                    onClick={() => navigate(`/chat/${message.chatId}`)}
                   >
                     Review Chat
                   </button>

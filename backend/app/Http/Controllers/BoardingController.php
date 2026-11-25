@@ -10,6 +10,8 @@ use App\Models\Watchlist;
 use App\Services\DemandService;
 use App\Services\GeminiService;
 use App\Services\NotificationService;
+use App\Support\Geo;
+use App\Support\HtmlSanitizer;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -59,15 +61,15 @@ class BoardingController extends Controller
                 // The dashboard form has no map/city/type inputs yet; these are the Node API's defaults.
                 'city' => $data['city'] ?? 'Colombo',
                 'area' => $data['area'] ?? null,
-                'latitude' => $data['latitude'] ?? '0.0',
-                'longitude' => $data['longitude'] ?? '0.0',
+                'latitude' => $data['latitude'] ?? null,
+                'longitude' => $data['longitude'] ?? null,
                 'boarding_type' => $data['boardingType'] ?? 'singleRoom',
                 'status' => BoardingStatus::Available,
             ]);
 
             // The form's "facilities" free text is kept in the listing's rules field.
             $post->postDetail()->create([
-                'description' => $data['description'],
+                'description' => HtmlSanitizer::clean($data['description']),
                 'rules' => $data['facilities'] ?? '',
             ]);
 
@@ -100,7 +102,7 @@ class BoardingController extends Controller
             $post->update($changes);
 
             $detail = array_filter([
-                'description' => $data['description'] ?? null,
+                'description' => isset($data['description']) ? HtmlSanitizer::clean($data['description']) : null,
                 'rules' => $data['features'] ?? null,
             ], fn ($value) => filled($value));
 
@@ -261,8 +263,8 @@ class BoardingController extends Controller
             'features' => ['nullable', 'string', 'max:2000'],
             'city' => ['nullable', 'string', 'max:255'],
             'area' => ['nullable', 'string', 'max:255'],
-            'latitude' => ['nullable', 'numeric'],
-            'longitude' => ['nullable', 'numeric'],
+            'latitude' => ['nullable', 'numeric', 'between:'.Geo::SRI_LANKA['minLat'].','.Geo::SRI_LANKA['maxLat'], 'required_with:longitude'],
+            'longitude' => ['nullable', 'numeric', 'between:'.Geo::SRI_LANKA['minLng'].','.Geo::SRI_LANKA['maxLng'], 'required_with:latitude'],
             'boardingType' => ['nullable', 'string', Rule::in(BoardingType::values())],
             'images' => [$creating ? 'required' : 'sometimes', 'array', 'min:1', 'max:5'],
             'images.*' => ['image', 'max:8192'],

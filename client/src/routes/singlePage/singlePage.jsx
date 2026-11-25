@@ -18,7 +18,7 @@ function SinglePage() {
   const post = useLoaderData();
   const [saved, setSaved] = useState(post.isSaved);
   const [bookingStatus, setBookingStatus] = useState(post.bookingRequestStatus);
-  const [bookingRequestId, setBookingRequestId] = useState(post.bookingRequestId);
+  const [, setBookingRequestId] = useState(post.bookingRequestId);
   const [remainingSlots, setRemainingSlots] = useState(post.remainingSlots);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [bookingError, setBookingError] = useState("");
@@ -95,7 +95,7 @@ function SinglePage() {
     setChatLoading(true);
     try {
       const res = await apiRequest.post("/chats", { receiverId: post.ownerId });
-      navigate(`/sakith/chat/${res.data.id}`);
+      navigate(`/chat/${res.data.id}`);
     } catch (err) {
       console.log(err);
     } finally {
@@ -206,7 +206,7 @@ function SinglePage() {
 
               {currentUser && currentUser.role === "student" && currentUser.id !== post.ownerId && (
                 <div className="buttons">
-                  <Link to={`/sakith/inquiry?postId=${post.id}&ownerId=${post.ownerId}&title=${encodeURIComponent(post.title)}&type=view`}>
+                  <Link to={`/inquiry?postId=${post.id}&ownerId=${post.ownerId}&title=${encodeURIComponent(post.title)}&type=view`}>
                     <button>
                       <img src="/chat.png" alt="" />
                       Send Inquiry

@@ -9,6 +9,7 @@ use App\Enums\BookingRequestStatus;
 use App\Enums\PreferredTenantGender;
 use App\Models\Concerns\SerializesCamelCase;
 use App\Services\DemandService;
+use App\Support\Geo;
 use Database\Factories\PostFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -36,6 +37,8 @@ class Post extends Model
     {
         return [
             'rent' => 'integer',
+            'latitude' => 'float',
+            'longitude' => 'float',
             'images' => ImageUrlList::class,
             'boarding_type' => BoardingType::class,
             'status' => BoardingStatus::class,
@@ -89,6 +92,20 @@ class Post extends Model
      * Adds saved/inquiry/booking counts plus the number of slots currently held by live
      * booking requests, in a single query. Feeds {@see DemandService}.
      */
+    /**
+     * Rows inside the bounding box of a circle around a point. This is the cheap, index-friendly
+     * pre-filter; callers compute the exact distance afterwards (see {@see Geo}).
+     */
+    #[Scope]
+    protected function withinBoundingBox(Builder $query, float $lat, float $lng, float $radiusKm): void
+    {
+        $box = Geo::boundingBox($lat, $lng, $radiusKm);
+
+        $query->whereNotNull('latitude')->whereNotNull('longitude')
+            ->whereBetween('latitude', [$box['minLat'], $box['maxLat']])
+            ->whereBetween('longitude', [$box['minLng'], $box['maxLng']]);
+    }
+
     #[Scope]
     protected function withDemandCounts(Builder $query): void
     {

@@ -8,7 +8,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { useNotificationStore } from "../../lib/notificationStore";
 
 const getDashboardPath = (role) => {
-  if (role === "admin") return "/sakith/admin";
+  if (role === "admin") return "/admin";
   if (role === "boardingOwner") return "/boardings";
   return "/profile";
 };

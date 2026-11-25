@@ -34,10 +34,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(fn (Request $request) => true);
 
-        // The client reads `message` for a toast and `errors[0]` for the first field error.
+        // The client reads `message` for a toast and `errors[0]` for the first field error;
+        // `fields` maps each input (e.g. `postData.latitude`) to its messages for inline display.
         $exceptions->render(fn (ValidationException $e) => response()->json([
             'message' => collect($e->errors())->flatten()->first() ?? 'Validation failed',
             'errors' => collect($e->errors())->flatten()->values(),
+            'fields' => $e->errors(),
         ], 422));
 
         $exceptions->render(fn (AuthenticationException $e) => response()->json(

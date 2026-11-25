@@ -3,3 +3,16 @@
 **/node_modules
 **/dist
 **/.env
+
+# Playwright artefacts (the auth state holds a live session cookie)
+client/e2e/.auth/
+client/playwright-report/
+client/test-results/
+client/blob-report/
+
+# Local env files for the client
+client/.env.local
+
+# Editor / tooling
+.idea/
+.vscode/

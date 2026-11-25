@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: API tests (${{ matrix.db }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        db: [sqlite, mysql, pgsql]
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: boardingfinder
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="mysqladmin ping -psecret" --health-interval=5s --health-timeout=3s --health-retries=20
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: boardingfinder
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd="pg_isready -U postgres" --health-interval=5s --health-timeout=3s --health-retries=20
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: pdo_sqlite, pdo_mysql, pdo_pgsql, bcmath, pcntl
+          coverage: none
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: composer-${{ hashFiles('backend/composer.lock') }}
+
+      - run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Code style (Pint)
+        if: matrix.db == 'sqlite'
+        run: vendor/bin/pint --test
+
+      - name: Select database
+        run: |
+          case "${{ matrix.db }}" in
+            mysql) { echo "DB_CONNECTION=mysql"; echo "DB_HOST=127.0.0.1"; echo "DB_PORT=3306";
+                     echo "DB_DATABASE=boardingfinder"; echo "DB_USERNAME=root"; echo "DB_PASSWORD=secret"; } >> "$GITHUB_ENV" ;;
+            pgsql) { echo "DB_CONNECTION=pgsql"; echo "DB_HOST=127.0.0.1"; echo "DB_PORT=5432";
+                     echo "DB_DATABASE=boardingfinder"; echo "DB_USERNAME=postgres"; echo "DB_PASSWORD=secret"; } >> "$GITHUB_ENV" ;;
+            sqlite) { echo "DB_CONNECTION=sqlite"; echo "DB_DATABASE=:memory:"; } >> "$GITHUB_ENV" ;;
+          esac
+
+      - name: Migrations run forwards and backwards
+        if: matrix.db != 'sqlite'
+        run: |
+          php artisan migrate --force
+          php artisan migrate:rollback --force
+          php artisan migrate --seed --force
+
+      - name: Test suite
+        run: php artisan test
+
+  client:
+    name: Client lint & build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+
+  docker:
+    name: Docker images build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose build

@@ -6,7 +6,7 @@ import { useNotificationStore } from "../../lib/notificationStore";
 import { SocketContext } from "../../context/SocketContext";
 
 const getDashboardPath = (role) => {
-  if (role === "admin") return "/sakith/admin";
+  if (role === "admin") return "/admin";
   if (role === "boardingOwner") return "/boardings";
   return "/profile";
 };

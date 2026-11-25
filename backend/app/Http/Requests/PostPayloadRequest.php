@@ -5,6 +5,8 @@ namespace App\Http\Requests;
 use App\Enums\BoardingStatus;
 use App\Enums\BoardingType;
 use App\Enums\PreferredTenantGender;
+use App\Support\Geo;
+use App\Support\HtmlSanitizer;
 use App\Support\Keys;
 use Closure;
 use Illuminate\Foundation\Http\FormRequest;
@@ -34,21 +36,23 @@ abstract class PostPayloadRequest extends FormRequest
             }],
             'postData.address' => [$presence, 'string', 'max:255'],
             // The Node API judged "location" by city (falling back to area).
-            'postData.city' => [$presence, 'string', 'min:3'],
+            'postData.city' => [$presence, 'string', 'min:3', 'max:100'],
             'postData.area' => ['nullable', 'string', 'max:255'],
-            'postData.rent' => [$presence, 'integer', 'min:1'],
-            'postData.capacity' => [$presence, 'integer', 'min:1'],
-            'postData.bathroomCount' => ['nullable', 'integer', 'min:0'],
+            'postData.rent' => [$presence, 'integer', 'min:1', 'max:1000000'],
+            'postData.capacity' => [$presence, 'integer', 'min:1', 'max:50'],
+            'postData.bathroomCount' => ['nullable', 'integer', 'min:0', 'max:20'],
             'postData.boardingType' => [$presence, Rule::enum(BoardingType::class)],
             'postData.preferredTenantGender' => ['sometimes', Rule::enum(PreferredTenantGender::class)],
             'postData.status' => ['sometimes', Rule::enum(BoardingStatus::class)],
-            'postData.latitude' => [$presence, 'numeric'],
-            'postData.longitude' => [$presence, 'numeric'],
+            // Listings are Sri Lankan; a pin outside the island is a typo (or swapped lat/lng).
+            'postData.latitude' => [$presence, 'numeric', 'between:'.Geo::SRI_LANKA['minLat'].','.Geo::SRI_LANKA['maxLat']],
+            'postData.longitude' => [$presence, 'numeric', 'between:'.Geo::SRI_LANKA['minLng'].','.Geo::SRI_LANKA['maxLng']],
             'postData.images' => ['sometimes', 'array', 'max:20'],
-            'postData.images.*' => ['string', 'max:2048'],
+            // Photos are uploaded to Cloudinary by the browser; only HTTPS URLs are accepted.
+            'postData.images.*' => ['string', 'max:2048', 'url:https'],
 
             'postDetail' => [$presence, 'array'],
-            'postDetail.description' => [$presence, 'string', function (string $attribute, mixed $value, Closure $fail) {
+            'postDetail.description' => [$presence, 'string', 'max:20000', function (string $attribute, mixed $value, Closure $fail) {
                 // The editor stores HTML; count the words a reader would see.
                 $text = html_entity_decode(preg_replace('/<[^>]*>/', ' ', (string) $value));
 
@@ -64,10 +68,10 @@ abstract class PostPayloadRequest extends FormRequest
             'postDetail.furnished' => ['nullable', 'boolean'],
             'postDetail.petAllowed' => ['nullable', 'boolean'],
             'postDetail.nearestCampus' => ['nullable', 'string', 'max:255'],
-            'postDetail.distanceToCampus' => ['nullable', 'integer', 'min:0'],
-            'postDetail.distanceToBusStop' => ['nullable', 'integer', 'min:0'],
-            'postDetail.distanceToTown' => ['nullable', 'integer', 'min:0'],
-            'postDetail.rules' => ['nullable', 'string'],
+            'postDetail.distanceToCampus' => ['nullable', 'integer', 'min:0', 'max:100000'],
+            'postDetail.distanceToBusStop' => ['nullable', 'integer', 'min:0', 'max:100000'],
+            'postDetail.distanceToTown' => ['nullable', 'integer', 'min:0', 'max:100000'],
+            'postDetail.rules' => ['nullable', 'string', 'max:2000'],
         ];
     }
 
@@ -85,6 +89,11 @@ abstract class PostPayloadRequest extends FormRequest
             'postData.capacity.integer' => 'Available slots (capacity) must be a valid whole number of at least 1.',
             'postData.capacity.min' => 'Available slots (capacity) must be a valid whole number of at least 1.',
             'postDetail.description.required' => 'Description must be at least 10 words.',
+            'postData.rent.max' => 'Monthly rent looks too high (maximum Rs. 1,000,000).',
+            'postData.capacity.max' => 'A listing can have at most 50 slots.',
+            'postData.latitude.between' => 'The map pin must be inside Sri Lanka.',
+            'postData.longitude.between' => 'The map pin must be inside Sri Lanka.',
+            'postData.images.*.url' => 'Each photo must be an https:// image URL.',
         ];
     }
 
@@ -97,9 +106,16 @@ abstract class PostPayloadRequest extends FormRequest
     {
         $validated = $this->validated();
 
+        $detail = Keys::snake($validated['postDetail'] ?? []);
+
+        // Rich text is stored only after an allow-list pass; see HtmlSanitizer.
+        if (array_key_exists('description', $detail)) {
+            $detail['description'] = HtmlSanitizer::clean($detail['description']);
+        }
+
         return [
             Keys::snake($validated['postData'] ?? []),
-            Keys::snake($validated['postDetail'] ?? []),
+            $detail,
         ];
     }
 }

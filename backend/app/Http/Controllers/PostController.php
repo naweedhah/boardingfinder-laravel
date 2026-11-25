@@ -12,6 +12,7 @@ use App\Services\AlertNotifier;
 use App\Services\BookingException;
 use App\Services\BookingService;
 use App\Services\DemandService;
+use App\Support\Geo;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -23,6 +24,12 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
+        $near = $request->validate([
+            'lat' => ['nullable', 'numeric', 'between:-90,90', 'required_with:lng'],
+            'lng' => ['nullable', 'numeric', 'between:-180,180', 'required_with:lat'],
+            'radiusKm' => ['nullable', 'numeric', 'min:0.5', 'max:50'],
+        ]);
+
         $city = trim((string) $request->query('city'));
         $area = trim((string) $request->query('area'));
         $type = trim((string) $request->query('boardingType'));
@@ -31,6 +38,9 @@ class PostController extends Controller
         $capacity = (int) $request->query('capacity');
         $minPrice = (int) $request->query('minPrice');
         $maxPrice = (int) $request->query('maxPrice');
+        $nearPoint = isset($near['lat'], $near['lng'])
+            ? [(float) $near['lat'], (float) $near['lng'], (float) ($near['radiusKm'] ?? 5)]
+            : null;
 
         // A "city" search also matches listings whose neighbourhood carries that name, and vice versa.
         $posts = Post::query()
@@ -43,8 +53,23 @@ class PostController extends Controller
             ->when($capacity > 0, fn (Builder $q) => $q->where('capacity', $capacity))
             ->when($minPrice > 0, fn (Builder $q) => $q->where('rent', '>=', $minPrice))
             ->when($maxPrice > 0, fn (Builder $q) => $q->where('rent', '<=', $maxPrice))
+            ->when($nearPoint, fn (Builder $q) => $q->withinBoundingBox(...$nearPoint))
             ->latest()->latest('id')
             ->get();
+
+        if ($nearPoint) {
+            [$lat, $lng, $radiusKm] = $nearPoint;
+
+            // The bounding box is a square; drop its corners and order by real distance.
+            $posts = $posts
+                ->each(fn (Post $post) => $post->setAttribute(
+                    'distance_km',
+                    round(Geo::distanceKm($lat, $lng, $post->latitude, $post->longitude), 2),
+                ))
+                ->filter(fn (Post $post) => $post->distance_km <= $radiusKm)
+                ->sortBy('distance_km')
+                ->values();
+        }
 
         return PostResource::collection($posts);
     }

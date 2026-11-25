@@ -10,6 +10,13 @@ function NewPostPage() {
   const [value, setValue] = useState("");
   const [images, setImages] = useState([]);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
+
+  // Server messages keyed by input name, e.g. "postData.latitude" -> "latitude".
+  const fieldError = (name) => {
+    const match = Object.entries(fieldErrors).find(([key]) => key.split(".").pop() === name);
+    return match ? <span className="fieldError" role="alert">{match[1][0]}</span> : null;
+  };
 
   const navigate = useNavigate();
 
@@ -19,6 +26,8 @@ function NewPostPage() {
     const inputs = Object.fromEntries(formData);
     const toBoolean = (value) => value === "true";
 
+    setError("");
+    setFieldErrors({});
     try {
       const res = await apiRequest.post("/posts", {
         postData: {
@@ -54,8 +63,13 @@ function NewPostPage() {
       });
       navigate("/" + res.data.id);
     } catch (err) {
-      console.log(err);
-      setError(err.response?.data?.message || "Failed to create boarding");
+      const data = err.response?.data;
+      setFieldErrors(data?.fields || {});
+      setError(
+        data?.fields
+          ? "Please fix the highlighted fields."
+          : data?.message || "Failed to create boarding"
+      );
     }
   };
 
@@ -67,23 +81,28 @@ function NewPostPage() {
           <form onSubmit={handleSubmit}>
             <div className="item">
               <label htmlFor="title">Title</label>
-              <input id="title" name="title" type="text" />
+              <input id="title" name="title" type="text" required minLength={5} maxLength={60} />
+              {fieldError("title")}
             </div>
             <div className="item">
               <label htmlFor="rent">Monthly Rent</label>
-              <input id="rent" name="rent" type="number" />
+              <input id="rent" name="rent" type="number" required min={1} max={1000000} />
+              {fieldError("rent")}
             </div>
             <div className="item">
               <label htmlFor="address">Address</label>
-              <input id="address" name="address" type="text" />
+              <input id="address" name="address" type="text" required maxLength={255} />
+              {fieldError("address")}
             </div>
             <div className="item description">
               <label htmlFor="description">Description</label>
               <ReactQuill theme="snow" onChange={setValue} value={value} />
+              {fieldError("description")}
             </div>
             <div className="item">
               <label htmlFor="city">City</label>
-              <input id="city" name="city" type="text" />
+              <input id="city" name="city" type="text" required minLength={3} maxLength={100} />
+              {fieldError("city")}
             </div>
             <div className="item">
               <label htmlFor="area">Area</label>
@@ -91,7 +110,8 @@ function NewPostPage() {
             </div>
             <div className="item">
               <label htmlFor="capacity">Available Slots</label>
-              <input min={1} id="capacity" name="capacity" type="number" />
+              <input min={1} max={50} id="capacity" name="capacity" type="number" required />
+              {fieldError("capacity")}
             </div>
             <div className="item">
               <label htmlFor="bathroomCount">Bathroom Count</label>
@@ -99,11 +119,13 @@ function NewPostPage() {
             </div>
             <div className="item">
               <label htmlFor="latitude">Latitude</label>
-              <input id="latitude" name="latitude" type="text" />
+              <input id="latitude" name="latitude" type="number" step="any" min={5.85} max={9.9} placeholder="6.9147" required />
+              {fieldError("latitude")}
             </div>
             <div className="item">
               <label htmlFor="longitude">Longitude</label>
-              <input id="longitude" name="longitude" type="text" />
+              <input id="longitude" name="longitude" type="number" step="any" min={79.5} max={81.95} placeholder="79.9729" required />
+              {fieldError("longitude")}
             </div>
             <div className="item">
               <label htmlFor="boardingType">Boarding Type</label>
@@ -202,7 +224,7 @@ function NewPostPage() {
               <input id="rules" name="rules" type="text" placeholder="Curfew, visitors, quiet hours..." />
             </div>
             <button className="sendButton">Add Boarding</button>
-            {error && <span>{error}</span>}
+            {error && <span className="formError" role="alert">{error}</span>}
           </form>
         </div>
       </div>

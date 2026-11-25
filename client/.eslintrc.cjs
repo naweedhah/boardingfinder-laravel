@@ -11,6 +11,10 @@ module.exports = {
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },
   plugins: ['react-refresh'],
+  overrides: [
+    // Node-side config and Playwright specs run outside the browser.
+    { files: ['playwright.config.js', 'vite.config.js', 'e2e/**/*.js'], env: { node: true } },
+  ],
   rules: {
     "react/prop-types": "off",
     "no-unused-vars": "warn",
